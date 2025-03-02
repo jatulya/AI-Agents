@@ -1,0 +1,19 @@
+1. Create package.json file  (why do we need it?)
+    npm init --yes
+2. get openai sdk
+    search for openai sdk for nodejs
+    npm install openai  --> 
+3. Generate key
+   platform.openai.com 
+   login
+   generate key
+4. Create openai client to interact with openai llm model (what's llm)
+    Create index.js
+    import openai from "openai"
+    const OPENAI_API_KEY = ""
+    const client = new OpenAI({
+        apiKey : OPENAI_API_KEY
+    })
+
+5. Create tools (functions) for accessing real time data. Ususally such data comes from an api calls, here from weather api. But for now, we are just writing some hardcode functions
+   
