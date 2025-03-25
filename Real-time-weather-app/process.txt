@@ -16,4 +16,48 @@
     })
 
 5. Create tools (functions) for accessing real time data. Ususally such data comes from an api calls, here from weather api. But for now, we are just writing some hardcode functions
-   
+6. start chat with llm 
+    create prompt
+    client.chat.completions.create({
+    model : "gpt-4o-mini",
+    messages : [{"role" : "user", "content" : prompt}]
+    }).then(e => {
+        console.log(e.choices[0].message.content)
+    })
+    run the code using node index.js
+
+    here, the llm would be able to understand the prompt, but it wouldn't be able to give the output saying it doesn't have access to real time data. Thus we need to create a system prompt based on -->
+        . start
+        . plan
+        . action
+        . Observation
+        . Output State
+   how to execute them, available toots, give an example
+
+7. auto prompting
+    now we make chat.completions as a function 
+        async function chat(){
+        client.chat.completions.create({
+        model : "gpt-4o-mini",
+        messages : [
+            {"role" : "system", "content" : SYSTEM_PROMPT},
+            {"role" : "user", "content" : prompt}]
+        }).then(e => {
+            console.log(e.choices[0].message.content)
+        })
+        }
+    this would give (this is given in the system prompt)
+        {"type": "plan", "plan": "I will call the getWeatherDetails for ekm"}
+    as op (city name depends on the prompt)
+
+    now if we add 
+        {role : "developer", content : {{"type": "plan", "plan": "I will call the getWeatherDetails for ekm"}}}, 
+    we get the next step as op.
+    Similarly if we put next op in the messages parameter, we get the next step as op
+
+    so, instead of this manual adding, we run this in a while loop until the message content type == output
+    the content is passed as JSON object (in our example we have made it like that)
+    if content type == action, we call function mentioned in the action (called after the function is mapped)
+
+8.  install readline sync library to read user prompts from terminal
+9. Prompts related to the function (whose complete code may not be written) can also be asked. for example, sum of temperatures, difference of temperatures. if asked again, it would give results faster because data fetched from cache
